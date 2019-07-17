@@ -1,6 +1,6 @@
 {
   "install": "pip3 install --user -r requirements.txt",
-  "start": "python3 server.py",
+  "start": "PYTHONUNBUFFERED=true python3 server.py",
   "watch": {
     "ignore": [
       "\\.pyc$"
@@ -17,6 +17,6 @@
         "^start\\.sh"
       ]
     },
-    "throttle": 1000
+    "throttle": 5000
   }
 }
