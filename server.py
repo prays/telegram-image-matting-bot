@@ -1,19 +1,16 @@
-import flask, telebot
+# import the required libraries
+import flask, telebot, os
+
+# import the bot.py file
 from bot import bot
 
+# setup the Flask web server
 app = flask.Flask(__name__)
+# define the WEBHOOK path using the bot token
 WEBHOOK_URL_PATH = "/{}".format(bot.token)
-index = open('static/index.html').read()
 
 
-# Process index page
-@app.route('/')
-def root():
-    print('index!')
-    return index # 'xd' # flask.send_from_directory('/static', 'index.html')
-
-
-# Process webhook calls
+# web server webhook route
 @app.route(WEBHOOK_URL_PATH, methods=['POST'])
 def webhook():
     if flask.request.headers.get('content-type') == 'application/json':
@@ -24,6 +21,7 @@ def webhook():
     else:
         flask.abort(403)
 
+# start the app        
 if __name__ == "__main__":
-  
-  app.run()
+  app.run(host=os.getenv('IP', '0.0.0.0'), 
+            port=int(os.getenv('PORT', 4444)))
