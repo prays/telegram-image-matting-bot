@@ -1,2 +1,7 @@
 Flask
 PyTelegramBotAPI
+torch >= 1.0.0
+torchvision
+Pillow
+numpy
+opencv-python

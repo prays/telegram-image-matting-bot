@@ -1,2 +1,7 @@
+# ignore files
+.gitignore
+.DS_Store
+__pycache__
+src/__pycache__
+static/
 
-\.DS_Store
