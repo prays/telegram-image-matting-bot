@@ -15,30 +15,32 @@ import torch.nn.functional as F
 import torchvision.transforms as transforms
 
 from os import environ
+from dotenv import load_dotenv
 
 from src.models.modnet import MODNet
 
 # setup bot with Telegram token from .env
 #print(environ)
-bot = telebot.TeleBot(environ['TELEGRAM_TOKEN'])
+# Load .env
+load_dotenv()
+TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 
+bot = telebot.TeleBot('1401123329:AAG5-k0OKUfK2FV8IsEYijaR3jUz29AboV0')
+bot.delete_webhook()
 bot_text = '''
-Bip-bop human,
-
-I classify images using neural networks 🚀
+Welcome,
 
 Send me pictures, and I will matting them for you 🤟
 
-Created with ❤️ by Alain Perkaz. @wh_image_classificator_bot
-Source code on https://glitch.com/~telegram-image-classfication-bot
-
 Modify by Pray Somaldo
+
 '''
 
 
 
-# store files in /tmp so storage does not get complete  
-result_storage_path = 'tmp'  
+# store files in /tmp so storage does not get complete 
+input_storage_path = 'input_img' 
+result_storage_path = 'output_img'  
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -47,13 +49,13 @@ def send_welcome(message):
 @bot.message_handler(content_types=['photo'])
 def handle(message):
   
-  log_request(message)
-  
+  #log_request(message)
+  #print('foto added')
   image_name = save_image_from_message(message)
   
   # object recognition
   object_recognition_image(image_name)
-  bot.send_photo(message.chat.id, open('.tmp/{}'.format(image_name),'rb'), 'Here is your Matting photo! 🚀')
+  bot.send_photo(message.chat.id, open('{}/{}'.format(result_storage_path, image_name),'rb'), 'Here is your Matting photo! 🚀')
   
   # image classification
   #classification_list_result = classify_image(image_name)
@@ -97,7 +99,7 @@ def save_image_from_message(message):
   file_path = bot.get_file(image_id).file_path
 
   # generate image download url
-  image_url = "https://api.telegram.org/file/bot{0}/{1}".format(environ['TELEGRAM_TOKEN'], file_path)
+  image_url = "https://api.telegram.org/file/bot{0}/{1}".format(TELEGRAM_TOKEN, file_path)
   print(image_url)
   
   # create folder to store pic temporary, if it doesnt exist
@@ -106,7 +108,7 @@ def save_image_from_message(message):
   
   # retrieve and save image
   image_name = "{0}.jpg".format(image_id)
-  urllib.request.urlretrieve(image_url, "{0}/{1}".format(result_storage_path,image_name))
+  urllib.request.urlretrieve(image_url, "{0}/{1}".format(input_storage_path, image_name))
   
   return image_name
 
@@ -126,16 +128,18 @@ def classify_image(image_name):
 def object_recognition_image(image_name):
   # object recognition -> https://pjreddie.com/darknet/yolo/
   #os.system('cd .data/darknet && ./darknet detect cfg/yolov3-tiny.cfg yolov3-tiny.weights ../../{0}/{1}'.format(result_storage_path, image_name)) 
-  os.system('python3 inference.py --input-path {0}/{1} --output-path .tmp/{1} --ckpt-path pretrained/modnet_photographic_portrait_matting.ckpt'.format(result_storage_path, image_name))
+  os.system('python3 inference.py --input-path {0}/{2} --output-path {1}/ --file-output {2} --ckpt-path pretrained/modnet_photographic_portrait_matting.ckpt'.format(input_storage_path, result_storage_path, image_name))
 
   
   
 def cleanup_remove_image(image_name):
   os.remove('{0}/{1}'.format(result_storage_path, image_name))
 
-  
+
+bot.polling()
   
   
   
 # configure the webhook for the bot, with the url of the Glitch project
-bot.set_webhook("https://{}.glitch.me/{}".format(environ['PROJECT_NAME'], environ['TELEGRAM_TOKEN']))
+#bot.set_webhook("https://{}.glitch.me/{}".format(environ['PROJECT_NAME'], environ['TELEGRAM_TOKEN']))
+#bot.set_webhook("https://7.7.7.7:8443/")

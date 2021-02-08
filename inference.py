@@ -18,6 +18,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--input-path', type=str, help='path of input images')
     parser.add_argument('--output-path', type=str, help='path of output images')
+    parser.add_argument('--file-output', type=str, help='filename of output images')
     parser.add_argument('--ckpt-path', type=str, help='path of pre-trained MODNet')
     args = parser.parse_args()
 
@@ -86,5 +87,5 @@ if __name__ == '__main__':
     view_np = cv2.cvtColor(np.uint8(fg_np), cv2.COLOR_RGB2BGR)
     view_np = cv2.resize(view_np, (height, width))
 
-    matte_name = 'img_out.png'
-    cv2.imwrite('{}'.format(os.path.join(args.output_path, matte_name)), view_np)
+    #matte_name = 'img_out.png'
+    cv2.imwrite('{}'.format(os.path.join(args.output_path, args.file_output)), view_np)
