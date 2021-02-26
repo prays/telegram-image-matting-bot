@@ -2,8 +2,8 @@
 
 A telegram  bot that extract person from background. It can be useful for background changing through telegram app easily.
 
-<img src="static/images/demo1.png" width="320" height="480">
-<img src="static/images/demo2.png" width="320" height="480">
+<img src="static/images/demo1.png" width="300" height="480">
+<img src="static/images/demo2.png" width="300" height="480">
 
 ## Requirements
 ```
