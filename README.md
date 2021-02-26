@@ -28,6 +28,10 @@ python-dotenv==0.15.0
 ```
 python3 server.py
 ```
+
+## To-do
+- add option to chnage color background
+- provide video matting option
 ## Credits
 - [Alain Perkaz](https://aperkaz.github.io)
 - [telegram-unsplash-bot](https://github.com/aperkaz/telegram-unsplash-bot)
